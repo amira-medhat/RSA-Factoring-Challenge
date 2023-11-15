@@ -18,7 +18,7 @@ def main(file_path):
                 # Factorize the number
                 factor1, factor2 = factorize(n)
                 # Print the factorization
-                print(f"{n}={factor1}*{factor2}")
+                print(f"{n}={factor2}*{factor1}")
     except FileNotFoundError:
         print(f"Error: File '{file_path}' not found.")
     except Exception as e:
