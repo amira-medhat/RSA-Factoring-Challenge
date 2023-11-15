@@ -54,7 +54,7 @@ def main():
 	    # Print the factors of the number
                 print(f"{num}={factor}*{num // factor}")
 
-	if time.time() - start_time > 5:
+	if (time.time() - start_time > 5):
                 print("Time limit exceeded")
                 exit()
 
