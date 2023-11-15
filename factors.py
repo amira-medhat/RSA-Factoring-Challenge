@@ -1,13 +1,41 @@
 #!/usr/bin/python3
 import sys
 
+def pollards_rho(n):
+    # Pollard's rho algorithm for factorization
+    x = 2
+    y = 2
+    d = 1
+
+    f = lambda x: (x**2 + 1) % n
+
+    while d == 1:
+        x = f(x)
+        y = f(f(y))
+        d = gcd(abs(x - y), n)
+
+    return d
+
+def gcd(a, b):
+    # Euclidean algorithm for calculating the greatest common divisor
+    while b:
+        a, b = b, a % b
+    return a
+
 def factorize(n):
-    # Find two factors of n
-    for i in range(2, int(n**0.5) + 1):
-        if n % i == 0:
-            return i, n // i
-    # If n is prime, return n as one of the factors
-    return n, 1
+    # Factorization using Pollard's rho algorithm
+    factors = []
+    
+    while n > 1:
+        # Use Pollard's rho to find a non-trivial factor
+        factor = pollards_rho(n)
+        
+        # Divide n by the factor
+        n //= factor
+        
+        factors.append(factor)
+
+    return factors
 
 def main(file_path):
     try:
@@ -16,9 +44,9 @@ def main(file_path):
                 # Convert the line to an integer
                 n = int(line)
                 # Factorize the number
-                factor1, factor2 = factorize(n)
+                factors = factorize(n)
                 # Print the factorization
-                print(f"{n}={factor2}*{factor1}")
+                print(f"{n}={'*'.join(map(str, factors))}")
     except FileNotFoundError:
         print(f"Error: File '{file_path}' not found.")
     except Exception as e:
