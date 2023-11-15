@@ -1,62 +1,24 @@
 #!/usr/bin/python3
 import sys
-import time
-
-def pollards_rho(n):
-    # Pollard's rho algorithm for factorization
-    x = 2
-    y = 2
-    d = 1
-
-    f = lambda x: (x**2 + 1) % n
-
-    while d == 1:
-        x = f(x)
-        y = f(f(y))
-        d = gcd(abs(x - y), n)
-
-    return d
-
-def gcd(a, b):
-    # Euclidean algorithm for calculating the greatest common divisor
-    while b:
-        a, b = b, a % b
-    return a
 
 def factorize(n):
-    # Factorization using Pollard's rho algorithm
-    factors = []
-    
-    while n > 1:
-        # Use Pollard's rho to find a non-trivial factor
-        factor = pollards_rho(n)
-        
-        # Divide n by the factor
-        n //= factor
-        
-        factors.extend([factor, n] if n != 1 else [factor])
-
-    return factors
+    # Find two factors of n
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:
+            return i, n // i
+    # If n is prime, return n as one of the factors
+    return n, 1
 
 def main(file_path):
-    start_time = time.time()
-    
     try:
         with open(file_path, 'r') as file:
             for line in file:
                 # Convert the line to an integer
                 n = int(line)
-                
-                # Check time limit
-                if time.time() - start_time > 5:
-                    print("Time limit exceeded")
-                    exit()
-                
                 # Factorize the number
-                factors = factorize(n)
-                
+                factor1, factor2 = factorize(n)
                 # Print the factorization
-                print(f"{n}={'*'.join(map(str, factors))}")
+                print(f"{n}={factor1}*{factor2}")
     except FileNotFoundError:
         print(f"Error: File '{file_path}' not found.")
     except Exception as e:
